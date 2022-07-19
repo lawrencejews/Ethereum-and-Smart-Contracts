@@ -13,8 +13,22 @@
 - Web3 means blockchain tech with some purpose.
 - MetaMask is a browser plugin for wallets.
 - Add MetaMask to your extension on chrome, Android or IoS.
+- Activate your localhost environment with a private key from a hardhat node
 - Set up a webpack.config.js file
 - Add dependencies for webpack with a python server `yarn add -D webpack webpack-cli ts-loader html-webpack-plugin dotenv`.
 - Create a tsconfig.json for your project.
-- Pointing to a contract MUST HAVE:`Address or name, contractInterface and signer or Provider`.
+- Pointing to a contract MUST HAVE: `Address or name, contractInterface and signer or Provider`.
 - Testing by running webpack `npx webpack` and then run the dev server `cd dist: run -- python3 -m http.server 6969`
+### Solidity
+- To run your project locally, you must follow the steps below: 
+```
+1. Run your server - python3
+2. npx hardhat node 
+3. Run the deploy-script file from hardhat node
+4. Update the .env
+5. Relaunch webpack file with the .env to connect to metamask
+```
+- View functions don't change the contracts state
+- Pure cannot read or write on the contract.
+- Gas reporter: build smart contracts and watch the price changes, install `yarn add -D hardhat-gas-reporter` and then to the hardhat.config add this`import "hardhat-gas-reporter"`. Run `npx hardhat test`.
+

@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import Counter from "../artifacts/contracts/numberCounter.sol/Counter.json";
 
 
 function getEth() {
@@ -30,13 +31,30 @@ async function run() {
   if (!await hasAccounts() && !await requestAccounts()) {
     throw new Error("Please let me take your money");
   }
-  const hello = new ethers.Contract(
-    "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
-    [
-      "function hello() public pure returns (string memory)"
-    ],
-    new ethers.providers.Web3Provider(getEth()), // contacting the network
+  const counter = new ethers.Contract(
+    process.env.CONTRACT_ADDRESS,
+    Counter.abi,
+    new ethers.providers.Web3Provider(getEth()).getSigner(), // contacting the network
   );
-  document.body.innerHTML = await hello.hello();
+
+  const el = document.createElement('div');
+  async function setCounter(count?) {
+    el.innerHTML = count || await counter.getCounter();
+  }
+  setCounter();
+
+  const button = document.createElement('button');
+  button.innerText = "increment";
+  button.onclick = async function () {
+    await counter.count();
+  }
+
+  counter.on(counter.filters.CounterInc(), function (count) {
+    setCounter(count);
+  })
+
+  document.body.appendChild(el);
+  document.body.appendChild(button);
+
 }
 run()
